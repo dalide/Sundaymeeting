@@ -12,8 +12,11 @@ def index():
 	filename = os.path.join(image_folder, 'data-scientist.jpg')
 	return render_template('index.html', ds_image = filename)
 
+@app.route('/signuplogin', methods = ['POST','GET'])
+def signuplogin():
+	return render_template('signuplogin.html')
 
 
 
 if __name__ == '__main__':
-        app.run(debug=True)
+    app.run(debug=True)
