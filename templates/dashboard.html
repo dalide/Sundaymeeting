@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dash Board</title>
+</head>
+<body>
+	{% with messages = get_flashed_messages() %}
+		{% if messages %}
+			<ul>
+				{% for message in messages %}
+				<li>{{message}}</li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+	{% endwith %}
+
+	
+	<p>Do you want to <a href="{{url_for('index')}}"><b>log out?</b></a></p>
+
+	<h3>Users (<a href = "{{ url_for('signup') }}">Add User
+         </a>)</h3>
+      
+      <table>
+         <thead>
+            <tr>
+               <th>Name</th>
+               <th>City</th>
+               <th>Address</th>
+               <th>Zipcode</th>
+            </tr>
+         </thead>
+         
+         <tbody>
+            {% for user in users %}
+               <tr>
+                  <td>{{ user.name }}</td>
+                  <td>{{ user.city }}</td>
+                  <td>{{ user.addr }}</td>
+                  <td>{{ user.zipcode }}</td>
+               </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+</body>
+</html>
