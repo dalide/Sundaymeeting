@@ -4,6 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 
 image_folder = os.path.join('static', 'images')
+# css_folder = os.path.join('static', 'css')
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'lichengshuaige'
@@ -36,7 +37,8 @@ def index():
 # 	return render_template('signuplogin.html')
 @app.route('/dashboard')
 def dashboard():
-	return render_template('dashboard.html', users = users.query.all())
+
+	return render_template('dashboard.html',users = users.query.all())
 
 @app.route('/signup', methods = ['GET', 'POST'])
 def signup():
