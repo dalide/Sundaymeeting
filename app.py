@@ -2,6 +2,7 @@ from flask import Flask, flash, redirect, render_template, request, session, abo
 from random import randint
 from flask_sqlalchemy import SQLAlchemy
 import os
+from functools import wraps
 
 image_folder = os.path.join('static', 'images')
 # css_folder = os.path.join('static', 'css')
@@ -9,6 +10,18 @@ image_folder = os.path.join('static', 'images')
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'lichengshuaige'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.sqlite3'
+
+
+# login required decorator
+def login_required(f):
+	@wraps(f)
+	def wrap(*args, **kwargs):
+		if 'logged_in' in session:
+			return f(*args, **kwargs)
+		else:
+			flash('You need to login first')
+			return redirect(url_for('login'))
+	return wrap
 
 db = SQLAlchemy(app)
 
@@ -36,6 +49,7 @@ def index():
 # def signuplogin():
 # 	return render_template('signuplogin.html')
 @app.route('/dashboard')
+@login_required
 def dashboard():
 
 	return render_template('dashboard.html',users = users.query.all())
@@ -64,11 +78,18 @@ def login():
 		if request.form['username'] !='admin' or request.form['password'] !='admin':
 			error = 'Invalid username or password. Please try again!'
 		else:
+			session['logged_in']=True
 			flash('You were successfully logged in')
 			return redirect(url_for('dashboard'))
 
 	return render_template('login.html', error=error)
 
+@app.route('/logout')
+@login_required
+def logout():
+	session.pop('logged_in', None)
+	flash('You were just logged out.')
+	return redirect(url_for('index'))
 
 
 
